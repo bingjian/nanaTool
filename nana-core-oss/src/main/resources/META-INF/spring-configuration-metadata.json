@@ -1,0 +1,53 @@
+{
+  "hints": [
+    {
+      "name": "oss.type",
+      "values": [
+        {
+          "value": "minio"
+        },
+        {
+          "value": "huawei"
+        },
+        {
+          "value": "tianyi"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "sourceType": "org.bingjian.config.properties.OssProperties",
+      "name": "对象存储参数配置",
+      "type": "org.bingjian.config.properties.OssProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "org.bingjian.config.properties.OssProperties",
+      "name": "oss.type",
+      "description": "云服务商",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.bingjian.config.properties.OssProperties",
+      "name": "oss.accessKeyId",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.bingjian.config.properties.OssProperties",
+      "name": "oss.accessKeySecret",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.bingjian.config.properties.OssProperties",
+      "name": "oss.endpoint",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.bingjian.config.properties.OssProperties",
+      "name": "oss.bucketName",
+      "type": "java.lang.String"
+    }
+  ]
+}

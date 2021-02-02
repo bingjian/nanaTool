@@ -1,4 +1,4 @@
-package org.bingjian;
+package org.bingjian.util;
 
 import cn.hutool.core.util.StrUtil;
 

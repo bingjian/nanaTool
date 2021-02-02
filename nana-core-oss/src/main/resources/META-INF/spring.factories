@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.bingjian.storage.MinioOssAutoConfigure,\
+org.bingjian.storage.HuaweiOssAutoConfigure,\
+org.bingjian.storage.TianyiOssAutoConfigure  

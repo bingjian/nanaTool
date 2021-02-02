@@ -5,18 +5,18 @@
 
     <groupId>org.bingjian</groupId>
     <artifactId>nana-tool</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <name>nana-tool</name>
     <description>
         娜娜工具类开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud 项目的公共工具类
     </description>
-    <url>https://github.com/bingjian/nanaTool</url>
+    <!--    <url>https://github.com/bingjian/nanaTool</url>-->
 
     <developers>
         <developer>
-            <id>bingjiang</id>
-            <name>方龙</name>
+            <id>bingjian</id>
+            <name>冰鉴</name>
             <email>455383157@qq.com</email>
             <roles>
                 <role>Java Development Engineer</role>
@@ -32,21 +32,13 @@
         </license>
     </licenses>
 
-    <scm>
-        <connection>https://github.com/bingjian/nanaTool.git</connection>
-        <developerConnection>https://github.com/chillzhuang</developerConnection>
-        <url>https://github.com/chillzhuang/blade-tool.git</url>
-    </scm>
-
     <properties>
-        <nana.tool.version>2.8.0</nana.tool.version>
-
         <java.version>1.8</java.version>
         <maven.plugin.version>3.8.0</maven.plugin.version>
         <swagger.version>2.10.5</swagger.version>
         <swagger.models.version>1.6.2</swagger.models.version>
         <knife4j.version>2.0.6</knife4j.version>
-        <mybatis.plus.version>3.4.0</mybatis.plus.version>
+        <mybatis.plus.version>3.4.1</mybatis.plus.version>
         <protostuff.version>1.6.0</protostuff.version>
         <disruptor.version>3.4.2</disruptor.version>
         <spring.boot.admin.version>2.3.0</spring.boot.admin.version>
@@ -54,18 +46,20 @@
         <alibaba.cloud.version>2.2.3.RELEASE</alibaba.cloud.version>
         <alibaba.seata.version>1.3.0</alibaba.seata.version>
         <spring.plugin.version>2.0.0.RELEASE</spring.plugin.version>
-
         <spring.boot.version>2.2.11.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.SR8</spring.cloud.version>
         <spring.platform.version>Cairo-SR8</spring.platform.version>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <mapstruct.version>1.3.0.Final</mapstruct.version>
     </properties>
 
     <modules>
         <module>nana-core-tool</module>
         <module>nana-core-oss</module>
+        <module>nana-core-validate</module>
+        <module>nana-core-mybatis</module>
+        <module>nana-core-map</module>
     </modules>
 
     <dependencyManagement>
@@ -166,6 +160,18 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.10</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -181,41 +187,71 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
         </plugins>
     </build>
 
     <!-- 配置maven项目的远程仓库 -->
-    <repositories>
-        <repository>
-            <id>aliyun-repos</id>
-            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+        <repositories>
+            <repository>
+                <id>nexus-public</id>
+                <url>http://nexus.funtl.com/repository/maven-public/</url>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </repository>
+        </repositories>
 
     <!-- 配置maven插件的远程仓库 -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>aliyun-plugin</id>
-            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+        <pluginRepositories>
+            <pluginRepository>
+                <id>aliyun-plugin</id>
+                <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </pluginRepository>
+            <pluginRepository>
+                <id>mojohaus-plugin</id>
+                <url>http://www.mojohaus.org/versions-maven-plugin/</url>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </pluginRepository>
+        </pluginRepositories>
 
     <!-- 分发到远程Maven仓库 -->
+    <!--    <distributionManagement>-->
+    <!--        <snapshotRepository>-->
+    <!--            <id>oss</id>-->
+    <!--            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
+    <!--        </snapshotRepository>-->
+    <!--        <repository>-->
+    <!--            <id>oss</id>-->
+    <!--            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+    <!--        </repository>-->
+    <!--    </distributionManagement>-->
+
+    <!--使用分发上传将项目打成jar包，上传到nexus私服上-->
     <distributionManagement>
-        <snapshotRepository>
-            <id>oss</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
+        <!--发布版本仓库-->
         <repository>
-            <id>oss</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <!--nexus服务器中用户名：在settings.xml中和<server>的id一致-->
+            <id>nexus-releases</id>
+            <!--仓库地址-->
+            <url>http://nexus.funtl.com/repository/maven-releases/</url>
         </repository>
+        <!--快照版本仓库-->
+        <snapshotRepository>
+            <!--nexus服务器中用户名：在settings.xml中和<server>的id一致-->
+            <id>nexus-snapshots</id>
+            <!--仓库地址-->
+            <url>http://nexus.funtl.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <profiles>
@@ -256,28 +292,37 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                        <!--                        <executions>-->
+                        <!--                            <execution>-->
+                        <!--                                <phase>verify</phase>-->
+                        <!--                                <goals>-->
+                        <!--                                    <goal>sign</goal>-->
+                        <!--                                </goals>-->
+                        <!--                            </execution>-->
+                        <!--                        </executions>-->
+                    </plugin>
+                    <!-- 版本号插件 -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>versions-maven-plugin</artifactId>
+                        <version>2.7</version>
                     </plugin>
                 </plugins>
             </build>
-            <distributionManagement>
-                <!-- 这里的id oss需要和setting.xml里面server节点配置的id一致-->
-                <snapshotRepository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
+            <!--            <distributionManagement>-->
+            <!--                &lt;!&ndash; 这里的id oss需要和setting.xml里面server节点配置的id一致&ndash;&gt;-->
+            <!--                <snapshotRepository>-->
+            <!--                    <id>oss</id>-->
+            <!--                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
+            <!--                </snapshotRepository>-->
+            <!--                <repository>-->
+            <!--                    <id>oss</id>-->
+            <!--                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+            <!--                </repository>-->
+            <!--            </distributionManagement>-->
         </profile>
     </profiles>
 

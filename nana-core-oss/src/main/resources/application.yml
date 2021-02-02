@@ -1,0 +1,6 @@
+oss: # minio huawei
+  endpoint: http://192.168.16.135:9000/
+  access-key-id: admin
+  access-key-secret: 123456789
+  bucket-name: obs-test-0594
+  type: minio
