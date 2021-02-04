@@ -50,11 +50,11 @@
             <artifactId>pollexor</artifactId>
             <version>2.0.4</version>
         </dependency>
-        <!-- AWS云 -->
+        <!-- 电信云 -->
         <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.926</version>
+            <groupId>com.dianxin</groupId>
+            <artifactId>oos-sdk</artifactId>
+            <version>5.0.0</version>
         </dependency>
     </dependencies>
 

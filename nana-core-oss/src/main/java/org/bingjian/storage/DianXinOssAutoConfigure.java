@@ -6,12 +6,9 @@ import cn.hutool.http.HttpUtil;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.HttpMethod;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -38,39 +35,29 @@ import java.net.URL;
 @EnableConfigurationProperties(OssProperties.class)
 @Configuration
 @Slf4j
-@ConditionalOnProperty(prefix = OssProperties.PREFIX, name = "type", havingValue = "tianyi", matchIfMissing = true)
-public class TianyiOssAutoConfigure {
+@ConditionalOnProperty(prefix = OssProperties.PREFIX, name = "type", havingValue = "dianxin", matchIfMissing = true)
+public class DianXinOssAutoConfigure {
 
     @Service
-    public class TianyiServiceImpl extends AbstractFileStrategy {
+    public class DianXinServiceImpl extends AbstractFileStrategy {
 
         private AmazonS3 s3 = null;
 
         @PostConstruct
         public void init() {
-            ClientConfiguration clientConfiguration = new ClientConfiguration();
-            //设置client的最大HTTP连接数
-            clientConfiguration.setMaxConnections(50);
-            //设置Socket层超时时间
-            clientConfiguration.setSocketTimeout(50000);
-            //设置建立连接的超时时间
-            clientConfiguration.setConnectionTimeout(50000);
+            ClientConfiguration configuration = new ClientConfiguration();
+            configuration.setMaxErrorRetry(10);
+            configuration.setMaxConnections(2000);
+            configuration.setSocketTimeout(30000);
             BasicAWSCredentials credentials = new BasicAWSCredentials(fileProperties.getAccessKeyId(), fileProperties.getAccessKeySecret());
-            AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(
-                    fileProperties.getEndpoint(), Regions.DEFAULT_REGION.getName());
-            AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-                    //客户端设置
-                    .withClientConfiguration(clientConfiguration)
-                    //凭证设置
-                    .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                    //endpoint设置
-                    .withEndpointConfiguration(endpointConfiguration)
-                    .build();
+            AmazonS3Client amazonS3 = new AmazonS3Client(credentials, configuration);
+            amazonS3.setEndpoint(fileProperties.getEndpoint());
+            this.s3 = amazonS3;
         }
 
         @Override
         public boolean headBucket(String bucketName) {
-            return s3.doesBucketExistV2(bucketName);
+            return s3.doesBucketExist(bucketName);
         }
 
         @Override
@@ -145,7 +132,7 @@ public class TianyiOssAutoConfigure {
                 s3is.close();
                 fos.close();
             } catch (AmazonServiceException e) {
-                System.err.println(e.getErrorMessage());
+                System.err.println(e.getMessage());
             } catch (FileNotFoundException e) {
                 System.err.println(e.getMessage());
             } catch (IOException e) {
@@ -189,7 +176,7 @@ public class TianyiOssAutoConfigure {
                 URL url = s3.generatePresignedUrl(generatePresignedUrlRequest);
                 return url.getPath();
             } catch (AmazonServiceException e) {
-                System.err.println(e.getErrorMessage());
+                System.err.println(e.getMessage());
             }
             return null;
         }

@@ -10,7 +10,7 @@
           "value": "huawei"
         },
         {
-          "value": "tianyi"
+          "value": "dianxin"
         }
       ]
     }
@@ -31,21 +31,25 @@
     },
     {
       "sourceType": "org.bingjian.config.properties.OssProperties",
+      "description": "Access key ID就像用户ID，可以唯一标识你的账户",
       "name": "oss.accessKeyId",
       "type": "java.lang.String"
     },
     {
       "sourceType": "org.bingjian.config.properties.OssProperties",
+      "description": "Access key Secret是你账户的密码",
       "name": "oss.accessKeySecret",
       "type": "java.lang.String"
     },
     {
       "sourceType": "org.bingjian.config.properties.OssProperties",
+      "description": "对象存储服务的URL",
       "name": "oss.endpoint",
       "type": "java.lang.String"
     },
     {
       "sourceType": "org.bingjian.config.properties.OssProperties",
+      "description": "默认对象存储名称",
       "name": "oss.bucketName",
       "type": "java.lang.String"
     }
